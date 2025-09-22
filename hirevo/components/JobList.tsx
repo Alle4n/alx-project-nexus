@@ -1,7 +1,7 @@
 "use client";
 
 import { useJobs } from "@/context/JobContext";
-import JobCard from "./JobCard";
+import JobCard from "@/components/JobCard";
 
 export default function JobList() {
   const { jobs, loading, error, refetch } = useJobs();
