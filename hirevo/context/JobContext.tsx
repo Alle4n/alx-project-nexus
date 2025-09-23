@@ -14,10 +14,9 @@ export interface Job {
 }
 
 interface Filters {
-  query?: string;
-  category?: string;
+  company?: string;
   location?: string;
-  experience?: string;
+  page?: number;
 }
 
 interface JobContextType {
@@ -48,22 +47,27 @@ export const JobProvider = ({ children }: Props) => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [filters, setFilters] = useState<Filters>({});
+  const [filters, setFilters] = useState<Filters>({ company: "Ubisoft", location: "us", page: 1 });
 
   const fetchJobs = async () => {
     setLoading(true);
     setError(null);
-    try {
-      const params = new URLSearchParams();
-      if (filters.query) params.append("query", filters.query);
-      if (filters.category) params.append("category", filters.category);
-      if (filters.location) params.append("location", filters.location);
-      if (filters.experience) params.append("experience", filters.experience);
 
-      const res = await fetch(`/api/jobs?${params.toString()}`);
-      if (!res.ok) throw new Error("Failed to fetch jobs");
-      const data: Job[] = await res.json();
-      setJobs(data);
+    try {
+      const res = await fetch("/api/jobs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          company: filters.company,
+          locality: filters.location,
+          page: filters.page,
+        }),
+      });
+
+      if (!res.ok) throw new Error(`Failed to fetch jobs: ${res.statusText}`);
+
+      const data = await res.json();
+      setJobs(data.jobs || []);
     } catch (err: any) {
       setError(err.message || "Unknown error");
     } finally {
