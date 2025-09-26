@@ -1,15 +1,43 @@
+// pages/api/jobs.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Default values for query & page
-  const { query = "developer jobs in chicago", page = "1" } = req.query;
-
-  // Build RapidAPI endpoint
-  const url = `https://${process.env.RAPIDAPI_HOST}/search?query=${encodeURIComponent(
-    String(query)
-  )}&page=${page}&num_pages=1&country=us&date_posted=all`;
-
   try {
+    // Default filters
+    let query = "developer jobs";
+    let page = 1;
+    let location: string | undefined;
+    let category: string | undefined;
+    let experience: string | undefined;
+    const numPerPage = 10; // jobs per page
+
+    if (req.method === "POST") {
+      // Read filters from request body
+      const body = req.body;
+      query = body.query || query;
+      page = body.page || page;
+      location = body.location;
+      category = body.category;
+      experience = body.experience;
+    } else {
+      // Fallback for GET requests (query string params)
+      query = (req.query.query as string) || query;
+      page = parseInt((req.query.page as string) || "1", 10);
+      location = req.query.location as string;
+      category = req.query.category as string;
+      experience = req.query.experience as string;
+    }
+
+    // Build search query dynamically
+    let searchQuery = query;
+    if (category) searchQuery += ` ${category}`;
+    if (location) searchQuery += ` in ${location}`;
+    if (experience) searchQuery += ` ${experience} level`;
+
+    const url = `https://${process.env.RAPIDAPI_HOST}/search?query=${encodeURIComponent(
+      searchQuery
+    )}&page=${page}&num_pages=${numPerPage}&country=us&date_posted=all`;
+
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -26,7 +54,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const data = await response.json();
-    return res.status(200).json(data);
+
+    // Return jobs and total count if available
+    return res.status(200).json({
+      jobs: data.jobs || [],
+      total: data.total_jobs || data.jobs?.length || 0,
+      page,
+      perPage: numPerPage,
+    });
   } catch (error: unknown) {
     console.error("API error:", error);
     return res.status(500).json({ error: "Unexpected error fetching jobs" });
