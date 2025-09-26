@@ -32,6 +32,10 @@ interface JobContextType {
   locations: string[];
   categories: string[];
   experiences: string[];
+  // ✅ Add these:
+  addJob: (job: Job) => void;
+  updateJob: (id: string, patch: Partial<Job>) => void;
+  deleteJob: (id: string) => void;
 }
 
 const JobContext = createContext<JobContextType>({
@@ -44,6 +48,9 @@ const JobContext = createContext<JobContextType>({
   locations: [],
   categories: [],
   experiences: [],
+  addJob: () => {},
+  updateJob: () => {},
+  deleteJob: () => {},
 });
 
 export const useJobs = () => useContext(JobContext);
@@ -90,6 +97,12 @@ export const JobProvider = ({ children }: Props) => {
     }
   };
 
+  // ✅ Add helper methods
+  const addJob = (job: Job) => setJobs((prev) => [job, ...prev]);
+  const updateJob = (id: string, patch: Partial<Job>) =>
+    setJobs((prev) => prev.map((job) => (job.id === id ? { ...job, ...patch } : job)));
+  const deleteJob = (id: string) => setJobs((prev) => prev.filter((job) => job.id !== id));
+
   useEffect(() => {
     fetchJobs();
   }, [filters]);
@@ -106,6 +119,9 @@ export const JobProvider = ({ children }: Props) => {
         locations,
         categories,
         experiences,
+        addJob,
+        updateJob,
+        deleteJob,
       }}
     >
       {children}
