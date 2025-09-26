@@ -9,7 +9,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let location: string | undefined;
     let category: string | undefined;
     let experience: string | undefined;
-    const numPerPage = 10; // jobs per page
+    const numPerPage = 10; // Fixed number of jobs per page
+
+    // Parse filters from request body (POST) or query string (GET) params
 
     if (req.method === "POST") {
       // Read filters from request body

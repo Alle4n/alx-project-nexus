@@ -71,10 +71,10 @@ export default function FilterBar() {
       </select>
 
       <div className="flex gap-2">
-        <button onClick={applyFilters} className="btn">
-          Apply
+        <button onClick={applyFilters} className="btn bg-blue-700 py-1 px-1 rounded">
+          Search
         </button>
-        <button onClick={resetFilters} className="btn-outline">
+        <button onClick={resetFilters} className="btn-outline bg-blue-700 py-1 px-1 rounded">
           Reset
         </button>
       </div>
