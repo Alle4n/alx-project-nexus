@@ -1,20 +1,31 @@
-"use client";
-
-import FilterBar from "@/components/FilterBar";
-import JobList from "@/components/JobList";
-import RolePanel from "@/components/RolePanel";
-import Pagination from "@/components/Pagination";
-import { JobProvider } from "@/context/JobContext";
+import Hero from "@/components/Hero";
 
 export default function HomePage() {
   return (
-    <JobProvider>
-      <main className="max-w-5xl mx-auto p-4 space-y-6">
-        <RolePanel />
-        <FilterBar />
-        <JobList />
-        <Pagination itemsPerPage={10} />
-      </main>
-    </JobProvider>
+    <div>
+      <Hero />
+
+      {/* Features Section */}
+      <section className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-3 gap-10 text-center">
+        <div>
+          <h3 className="text-xl font-semibold">For Job Seekers</h3>
+          <p className="mt-2 text-gray-600">
+            Search, filter, and apply to jobs that match your skills and aspirations.
+          </p>
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold">For Employers</h3>
+          <p className="mt-2 text-gray-600">
+            Post jobs, manage applications, and connect with top talent instantly.
+          </p>
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold">PWA Experience</h3>
+          <p className="mt-2 text-gray-600">
+            Install Hirevo on your device and browse jobs even offline.
+          </p>
+        </div>
+      </section>
+    </div>
   );
 }
