@@ -80,8 +80,8 @@ export const JobProvider = ({ children }: Props) => {
       const data: Job[] = (await res.json()).jobs || [];
       setJobs(data);
 
-      setLocations([...new Set(data.map((job) => job.location.city).filter(Boolean))]);
-      setCategories([...new Set(data.map((job) => job.category?.name).filter(Boolean))]);
+      setLocations([...new Set(data.map((job) => job.location.city).filter((c): c is string => !!c))]);
+      setCategories([...new Set(data.map((job) => job.category?.name).filter((c): c is string => !!c))]);
     } catch (err: any) {
       setError(err.message || "Unknown error");
     } finally {

@@ -29,9 +29,13 @@ export default function JobCard({
           <h3 className="font-semibold text-lg">{job.title}</h3>
           <div className="text-sm text-gray-600 dark:text-gray-400">
             {job.company?.name || "Unknown Company"} •{" "}
-            {job.location ? `${job.location.city}, ${job.location.country}` : "Unknown Location"} •{" "}
-            {job.job_type || "N/A"}
+            {job.location || "Unknown Location"} • {job.job_type || "N/A"}
           </div>
+          {job.category && (
+            <span className="inline-block mt-1 text-xs bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded">
+              {job.category.name}
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-2">

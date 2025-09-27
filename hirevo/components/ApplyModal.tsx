@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, FormEvent } from "react";
 import { Job } from "@/context/JobContext";
 
@@ -28,7 +30,9 @@ export default function ApplyModal({ job, onClose }: ApplyModalProps) {
 
         {submitted ? (
           <div>
-            <p className="text-sm">Application submitted. We'll contact you if selected.</p>
+            <p className="text-sm">
+              Application submitted. We&apos;ll contact you if selected.
+            </p>
             <div className="flex justify-end">
               <button
                 type="button"
