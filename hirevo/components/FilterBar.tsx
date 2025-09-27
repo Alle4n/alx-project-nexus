@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useJobs } from "@/context/JobContext";
 
 export default function FilterBar() {
-  const { filters, setFilters, locations, categories, experiences } = useJobs();
+  const { filters, setFilters, locations = [], categories = [], experiences = [] } = useJobs();
 
   const [query, setQuery] = useState(filters.query || "");
   const [category, setCategory] = useState(filters.category || "");
@@ -63,7 +63,7 @@ export default function FilterBar() {
       {/* Dynamic Experience Dropdown */}
       <select value={experience} onChange={(e) => setExperience(e.target.value)} className="input">
         <option value="">Any level</option>
-        {experiences.map((exp) => (
+        {(experiences || []).map((exp) => (
           <option key={exp} value={exp}>
             {exp}
           </option>

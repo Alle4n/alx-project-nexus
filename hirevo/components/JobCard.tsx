@@ -1,21 +1,13 @@
+"use client";
+
 import { useState } from "react";
 import ApplyModal from "./ApplyModal";
-
-interface Job {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  type: string;
-  category: string;
-  description: string;
-  postedAt: number;
-}
+import { Job } from "@/context/JobContext";
 
 interface JobCardProps {
   job: Job;
-  onUpdate: (id: string, patch: Partial<Job>) => void;
-  onDelete: (id: string) => void;
+  onUpdate?: (id: number, patch: Partial<Job>) => void;
+  onDelete?: (id: number) => void;
   isEmployerView?: boolean; // Hides Apply button if true
 }
 
@@ -36,14 +28,18 @@ export default function JobCard({
         <div>
           <h3 className="font-semibold text-lg">{job.title}</h3>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {job.company} • {job.location} • {job.type}
+            {job.company?.name || "Unknown Company"} •{" "}
+            {job.location ? `${job.location.city}, ${job.location.country}` : "Unknown Location"} •{" "}
+            {job.job_type || "N/A"}
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-500">{timeAgo(job.postedAt)}</span>
+          <span className="text-xs text-gray-500">
+            {job.posted_at ? timeAgo(new Date(job.posted_at).getTime()) : ""}
+          </span>
 
-          {isEmployerView && (
+          {isEmployerView && onUpdate && onDelete && (
             <div className="flex gap-2">
               <button
                 className="px-2 py-1 text-xs bg-yellow-400 text-black rounded"
@@ -62,15 +58,22 @@ export default function JobCard({
         </div>
       </div>
 
-      <div className={`mt-3 text-sm ${expanded ? "" : "line-clamp-2"}`}>
-        {job.description}
-      </div>
+      {job.description && (
+        <div className={`mt-3 text-sm ${expanded ? "" : "line-clamp-2"}`}>
+          {job.description}
+        </div>
+      )}
 
       {!isEmployerView && (
         <div className="mt-3 flex items-center gap-2">
-          <button className="px-3 py-1 bg-indigo-600 text-white rounded text-sm" onClick={toggleExpand}>
-            {expanded ? "Collapse" : "View"}
-          </button>
+          {job.description && (
+            <button
+              className="px-3 py-1 bg-indigo-600 text-white rounded text-sm"
+              onClick={toggleExpand}
+            >
+              {expanded ? "Collapse" : "View"}
+            </button>
+          )}
           <button
             className="px-3 py-1 border border-gray-300 rounded text-sm"
             onClick={() => setApplying(true)}

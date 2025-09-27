@@ -3,22 +3,20 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 export interface Job {
-  id: string;
+  id: number;
   title: string;
-  company: string;
-  location: string;
-  type: string;
-  category: string;
-  experience: string;
+  company: { id: number; name: string };
+  location: { id?: number; city: string; country: string };
+  job_type: string;
+  category?: { id: number; name: string };
   description?: string;
+  posted_at: string;
 }
 
 interface Filters {
   query?: string;
   category?: string;
   location?: string;
-  experience?: string;
-  company?: string;
   page?: number;
 }
 
@@ -31,11 +29,9 @@ interface JobContextType {
   refetch: () => void;
   locations: string[];
   categories: string[];
-  experiences: string[];
-  // ✅ Add these:
   addJob: (job: Job) => void;
-  updateJob: (id: string, patch: Partial<Job>) => void;
-  deleteJob: (id: string) => void;
+  updateJob: (id: number, patch: Partial<Job>) => void;
+  deleteJob: (id: number) => void;
 }
 
 const JobContext = createContext<JobContextType>({
@@ -47,7 +43,6 @@ const JobContext = createContext<JobContextType>({
   refetch: () => {},
   locations: [],
   categories: [],
-  experiences: [],
   addJob: () => {},
   updateJob: () => {},
   deleteJob: () => {},
@@ -63,33 +58,30 @@ export const JobProvider = ({ children }: Props) => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [filters, setFilters] = useState<Filters>({ company: "Ubisoft", page: 1 });
+  const [filters, setFilters] = useState<Filters>({ page: 1 });
 
   const [locations, setLocations] = useState<string[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
-  const [experiences, setExperiences] = useState<string[]>([]);
 
   const fetchJobs = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const res = await fetch("/api/jobs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(filters),
-      });
+      const params = new URLSearchParams(
+        Object.entries(filters)
+          .filter(([_, v]) => v !== undefined && v !== null)
+          .map(([k, v]) => [k, String(v)])
+      ).toString();
 
+      const res = await fetch(`/api/jobs?${params}`);
       if (!res.ok) throw new Error(`Failed to fetch jobs: ${res.statusText}`);
 
-      const data = await res.json();
-      const jobsData: Job[] = data.jobs || [];
-      setJobs(jobsData);
+      const data: Job[] = (await res.json()).jobs || [];
+      setJobs(data);
 
-      // Extract unique dynamic options
-      setLocations([...new Set(jobsData.map((job) => job.location).filter(Boolean))]);
-      setCategories([...new Set(jobsData.map((job) => job.category).filter(Boolean))]);
-      setExperiences([...new Set(jobsData.map((job) => job.experience).filter(Boolean))]);
+      setLocations([...new Set(data.map((job) => job.location.city).filter(Boolean))]);
+      setCategories([...new Set(data.map((job) => job.category?.name).filter(Boolean))]);
     } catch (err: any) {
       setError(err.message || "Unknown error");
     } finally {
@@ -97,11 +89,10 @@ export const JobProvider = ({ children }: Props) => {
     }
   };
 
-  // ✅ Add helper methods
   const addJob = (job: Job) => setJobs((prev) => [job, ...prev]);
-  const updateJob = (id: string, patch: Partial<Job>) =>
+  const updateJob = (id: number, patch: Partial<Job>) =>
     setJobs((prev) => prev.map((job) => (job.id === id ? { ...job, ...patch } : job)));
-  const deleteJob = (id: string) => setJobs((prev) => prev.filter((job) => job.id !== id));
+  const deleteJob = (id: number) => setJobs((prev) => prev.filter((job) => job.id !== id));
 
   useEffect(() => {
     fetchJobs();
@@ -118,7 +109,6 @@ export const JobProvider = ({ children }: Props) => {
         refetch: fetchJobs,
         locations,
         categories,
-        experiences,
         addJob,
         updateJob,
         deleteJob,
