@@ -34,8 +34,7 @@ export default function LoginPage() {
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
 
-      // Redirect to homepage or jobs page
-      router.push("/");
+      router.push("/"); // redirect to home/jobs page
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -45,12 +44,8 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-sm"
-      >
+      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-sm">
         <h1 className="text-xl font-bold mb-4 text-center">Login</h1>
-
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
         <label className="block mb-2 text-sm">
