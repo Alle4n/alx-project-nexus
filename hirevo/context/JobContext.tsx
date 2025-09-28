@@ -68,21 +68,33 @@ export const JobProvider = ({ children }: Props) => {
     setError(null);
 
     try {
-      const params = new URLSearchParams(
-        Object.entries(filters)
-          .filter(([_, v]) => v !== undefined && v !== null)
-          .map(([k, v]) => [k, String(v)])
-      ).toString();
-
-      const res = await fetch(`/api/jobs?${params}`);
+      const res = await fetch(`/api/jobs`);
       if (!res.ok) throw new Error(`Failed to fetch jobs: ${res.statusText}`);
 
-      const data: Job[] = (await res.json()).jobs || [];
-      setJobs(data);
+      const data: Job[] = await res.json();
+      console.log("Fetched jobs:", data);
 
-      setLocations([...new Set(data.map((job) => job.location.city).filter((c): c is string => !!c))]);
-      setCategories([...new Set(data.map((job) => job.category?.name).filter((c): c is string => !!c))]);
+      // Apply filters client-side
+      const filtered = data.filter((job) => {
+        const matchesQuery =
+          !filters.query ||
+          job.title.toLowerCase().includes(filters.query.toLowerCase()) ||
+          job.company.name.toLowerCase().includes(filters.query.toLowerCase());
+        const matchesCategory =
+          !filters.category || job.category?.name === filters.category;
+        const matchesLocation =
+          !filters.location || job.location.city === filters.location;
+        return matchesQuery && matchesCategory && matchesLocation;
+      });
+
+      setJobs(filtered);
+
+      setLocations([...new Set(data.map((job) => job.location.city).filter(Boolean))]);
+      setCategories([
+        ...new Set(data.map((job) => job.category?.name).filter(Boolean)),
+      ]);
     } catch (err: any) {
+      console.log("Error fetching jobs:", err);
       setError(err.message || "Unknown error");
     } finally {
       setLoading(false);

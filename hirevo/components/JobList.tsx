@@ -1,10 +1,40 @@
 "use client";
 
-import { useJobs } from "../context/JobContext";
+import { useEffect, useState } from "react";
 import JobCard from "./JobCard";
 
+interface Job {
+  id: number;
+  title: string;
+  description?: string;
+  company?: { name?: string };
+  category?: { name?: string };
+  location?: string;
+  job_type?: string;
+  posted_at?: string;
+}
+
 export default function JobList() {
-  const { jobs, loading, error } = useJobs();
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function fetchJobs() {
+      try {
+        const res = await fetch("/api/jobs");
+        const data = await res.json();
+        console.log("Jobs received in frontend:", data);
+        if (!res.ok) throw new Error(data.error || "Failed to fetch jobs");
+        setJobs(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchJobs();
+  }, []);
 
   if (loading) return <p>Loading jobs...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;

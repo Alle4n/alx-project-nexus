@@ -10,6 +10,7 @@ export default function FilterBar() {
   const [category, setCategory] = useState(filters.category || "");
   const [location, setLocation] = useState(filters.location || "");
 
+  // Keep local state in sync if context filters change externally
   useEffect(() => {
     setQuery(filters.query || "");
     setCategory(filters.category || "");
@@ -17,14 +18,20 @@ export default function FilterBar() {
   }, [filters]);
 
   const applyFilters = () => {
-    setFilters({ query, category, location, page: 1 });
+    setFilters({
+      ...filters,
+      query: query || undefined,
+      category: category || undefined,
+      location: location || undefined,
+      page: 1,
+    });
   };
 
   const resetFilters = () => {
     setQuery("");
     setCategory("");
     setLocation("");
-    setFilters({ page: 1 });
+    setFilters({ page: 1 }); // reset context filters
   };
 
   return (
@@ -37,7 +44,11 @@ export default function FilterBar() {
         className="input"
       />
 
-      <select value={location} onChange={(e) => setLocation(e.target.value)} className="input w-40">
+      <select
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+        className="input w-40"
+      >
         <option value="">All locations</option>
         {locations.map((loc) => (
           <option key={loc} value={loc}>
@@ -46,7 +57,11 @@ export default function FilterBar() {
         ))}
       </select>
 
-      <select value={category} onChange={(e) => setCategory(e.target.value)} className="input">
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        className="input"
+      >
         <option value="">All categories</option>
         {categories.map((c) => (
           <option key={c} value={c}>
@@ -56,10 +71,16 @@ export default function FilterBar() {
       </select>
 
       <div className="flex gap-2">
-        <button onClick={applyFilters} className="btn bg-blue-700 py-1 px-1 rounded">
+        <button
+          onClick={applyFilters}
+          className="btn bg-blue-700 py-1 px-2 rounded"
+        >
           Search
         </button>
-        <button onClick={resetFilters} className="btn-outline bg-blue-700 py-1 px-1 rounded">
+        <button
+          onClick={resetFilters}
+          className="btn-outline bg-blue-700 py-1 px-2 rounded"
+        >
           Reset
         </button>
       </div>

@@ -47,7 +47,7 @@ export default function PostJobForm({
     setCountry(countries[0] || null);
   }, []);
 
-  // Commented out city update to prevent build errors
+  // City list fetch (optional)
   // useEffect(() => {
   //   if (!country?.value) return;
   //   const cities = City.getCitiesOfCountry(country.value).map((c) => ({
@@ -60,6 +60,13 @@ export default function PostJobForm({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please login or sign up to post a job.");
+      return;
+    }
+
     if (!country || !city) return;
 
     const job: Job = {

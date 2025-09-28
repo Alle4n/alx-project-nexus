@@ -25,18 +25,36 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex gap-6">
+        <div className="hidden md:flex gap-6 items-center">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={`px-2 py-1 rounded ${
-                pathname === link.href ? "font-bold text-blue-600" : "text-gray-700"
+                pathname === link.href
+                  ? "font-bold text-blue-600"
+                  : "text-gray-700"
               }`}
             >
               {link.label}
             </Link>
           ))}
+
+          {/* Auth Buttons */}
+          <div className="flex gap-3 ml-6">
+            <Link
+              href="/auth/login"
+              className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
+            >
+              Login
+            </Link>
+            <Link
+              href="/auth/signup"
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Sign Up
+            </Link>
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
@@ -53,12 +71,28 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               className={`px-2 py-1 rounded ${
-                pathname === link.href ? "font-bold text-blue-600" : "text-gray-700"
+                pathname === link.href
+                  ? "font-bold text-blue-600"
+                  : "text-gray-700"
               }`}
             >
               {link.label}
             </Link>
           ))}
+
+          {/* Auth Buttons */}
+          <Link
+            href="/auth/login"
+            className="px-4 py-2 border border-blue-600 text-blue-600 rounded text-center"
+          >
+            Login
+          </Link>
+          <Link
+            href="/auth/signup"
+            className="px-4 py-2 bg-blue-600 text-white rounded text-center"
+          >
+            Sign Up
+          </Link>
         </div>
       )}
     </nav>
