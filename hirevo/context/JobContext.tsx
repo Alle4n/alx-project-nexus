@@ -1,38 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-
-export interface Job {
-  id: number;
-  title: string;
-  company: { id: number; name: string };
-  location: { id?: number; city: string; country: string };
-  job_type: string;
-  category?: { id: number; name: string };
-  description?: string;
-  posted_at: string;
-}
-
-interface Filters {
-  query?: string;
-  category?: string;
-  location?: string;
-  page?: number;
-}
-
-interface JobContextType {
-  jobs: Job[];
-  loading: boolean;
-  error: string | null;
-  filters: Filters;
-  setFilters: (filters: Filters) => void;
-  refetch: () => void;
-  locations: string[];
-  categories: string[];
-  addJob: (job: Job) => void;
-  updateJob: (id: number, patch: Partial<Job>) => void;
-  deleteJob: (id: number) => void;
-}
+import type { Job, Filters, JobContextType, JobProviderProps } from "@/interfaces";
 
 const JobContext = createContext<JobContextType>({
   jobs: [],
@@ -50,11 +19,7 @@ const JobContext = createContext<JobContextType>({
 
 export const useJobs = () => useContext(JobContext);
 
-interface Props {
-  children: ReactNode;
-}
-
-export const JobProvider = ({ children }: Props) => {
+export const JobProvider = ({ children }: JobProviderProps) => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -78,17 +43,28 @@ export const JobProvider = ({ children }: Props) => {
         const matchesQuery =
           !filters.query ||
           job.title.toLowerCase().includes(filters.query.toLowerCase()) ||
-          job.company.name.toLowerCase().includes(filters.query.toLowerCase());
+          job.company?.name?.toLowerCase().includes(filters.query.toLowerCase());
         const matchesCategory =
           !filters.category || job.category?.name === filters.category;
         const matchesLocation =
-          !filters.location || job.location.city === filters.location;
+          !filters.location ||
+          (typeof job.location === "object" && job.location !== null && "city" in job.location && job.location.city === filters.location);
         return matchesQuery && matchesCategory && matchesLocation;
       });
 
       setJobs(filtered);
 
-      setLocations([...new Set(data.map((job) => job.location.city).filter(Boolean))]);
+      setLocations([
+        ...new Set(
+          data
+            .map((job) =>
+              typeof job.location === "object" && job.location !== null && "city" in job.location
+                ? job.location.city
+                : undefined
+            )
+            .filter(Boolean)
+        ),
+      ]);
       setCategories([
         ...new Set(data.map((job) => job.category?.name).filter((name): name is string => Boolean(name))),
       ]);

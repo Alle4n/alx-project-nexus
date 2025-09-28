@@ -1,12 +1,10 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { Job } from "@/context/JobContext";
+import { ApplyModalProps
+  
+ } from "@/interfaces";
 
-interface ApplyModalProps {
-  job: Job;
-  onClose: () => void;
-}
 
 export default function ApplyModal({ job, onClose }: ApplyModalProps) {
   const [name, setName] = useState("");

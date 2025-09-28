@@ -2,21 +2,8 @@
 
 import { useState } from "react";
 import ApplyModal from "./ApplyModal";
+import { Job, JobCardProps} from "@/interfaces";
 
-interface Job {
-  id: number;
-  title: string;
-  description?: string;
-  company?: { name?: string };
-  category?: { name?: string };
-  location?: string;
-  job_type?: string;
-  posted_at?: string;
-}
-
-interface JobCardProps {
-  job: Job;
-}
 
 export default function JobCard({ job }: JobCardProps) {
   const [expanded, setExpanded] = useState(false);
@@ -39,7 +26,7 @@ export default function JobCard({ job }: JobCardProps) {
         <div>
           <h3 className="font-semibold text-lg">{job.title}</h3>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {job.company?.name || "Unknown Company"} • {job.location || "Unknown Location"} •{" "}
+            {job.company?.name || "Unknown Company"} • {job.location ? `${job.location.city}, ${job.location.country}` : "Unknown Location"} •{" "}
             {job.job_type || "N/A"}
           </div>
           {job.category && (

@@ -1,10 +1,8 @@
 "use client";
 
 import { useJobs } from "@/context/JobContext";
+import { PaginationProps } from "@/interfaces";
 
-interface PaginationProps {
-  itemsPerPage: number;
-}
 
 export default function Pagination({ itemsPerPage }: PaginationProps) {
   const { filters, setFilters, jobs } = useJobs();

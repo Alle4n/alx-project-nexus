@@ -3,24 +3,7 @@
 import { useState, useEffect, FormEvent } from "react";
 import Select from "react-select";
 import { Country, City } from "country-state-city";
-
-interface Job {
-  id: string;
-  title: string;
-  company: string;
-  country: string;
-  city: string;
-  type: string;
-  category: string;
-  description: string;
-  postedAt: number;
-}
-
-interface PostJobFormProps {
-  onClose: () => void;
-  onAdd: (job: Job) => void;
-  employerName?: string;
-}
+import { Job, PostJobFormProps } from "@/interfaces";
 
 export default function PostJobForm({
   onClose,
@@ -70,15 +53,15 @@ export default function PostJobForm({
     if (!country || !city) return;
 
     const job: Job = {
-      id: Date.now().toString(),
+      id: Date.now(),
       title,
-      company,
-      country: country.label,
-      city: city.label,
-      type,
-      category,
+      company: {
+        name: company,
+      },
+      // city: city.label, 
+      category: { name: category },
       description,
-      postedAt: Date.now(),
+      posted_at: Date.now().toString(),
     };
     onAdd(job);
     onClose();
