@@ -30,11 +30,10 @@ export default function LoginPage() {
 
       const data = await res.json();
 
-      // Save access + refresh tokens locally
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
 
-      router.push("/"); // redirect to home/jobs page
+      router.push("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {

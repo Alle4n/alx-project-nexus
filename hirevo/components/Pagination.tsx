@@ -9,7 +9,6 @@ interface PaginationProps {
 export default function Pagination({ itemsPerPage }: PaginationProps) {
   const { filters, setFilters, jobs } = useJobs();
 
-  // Calculate total pages
   const totalPages = Math.ceil(jobs.length / itemsPerPage);
   const currentPage = filters.page || 1;
 

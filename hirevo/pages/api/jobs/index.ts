@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const jobs = await response.json();
-    console.log("Jobs fetched from backend:", jobs); // check console
+    console.log("Jobs fetched from backend:", jobs); // console log for debugging
     return res.status(200).json(jobs);
   } catch (err) {
     console.log("Fetch error:", err);

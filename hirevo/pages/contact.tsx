@@ -1,4 +1,3 @@
-// pages/contact.tsx
 import {
   FaInstagram,
   FaXTwitter,
@@ -16,7 +15,6 @@ export default function ContactPage() {
         </p>
       </header>
 
-      {/* Contact Info Section */}
       <section className="bg-white p-6 rounded shadow space-y-4">
         <h2 className="text-2xl font-semibold text-indigo-700">Get in Touch</h2>
         <p className="text-gray-700">
@@ -24,7 +22,7 @@ export default function ContactPage() {
         </p>
 
         <ul className="flex gap-6 justify-center mt-4 text-[28px]">
-          {/* Twitter (X) */}
+
           <li>
             <a
               href="https://twitter.com/yourhandle"
@@ -36,7 +34,6 @@ export default function ContactPage() {
             </a>
           </li>
 
-          {/* Email */}
           <li>
             <a
               href="mailto:hello@hirevo.com"
@@ -46,7 +43,6 @@ export default function ContactPage() {
             </a>
           </li>
 
-          {/* WhatsApp */}
           <li>
             <a
               href="https://wa.me/256700000000"
@@ -58,7 +54,6 @@ export default function ContactPage() {
             </a>
           </li>
 
-          {/* Instagram */}
           <li>
             <a
               href="https://instagram.com/yourhandle"
@@ -72,7 +67,6 @@ export default function ContactPage() {
         </ul>
       </section>
 
-      {/* Contact Form */}
       <section className="bg-white p-6 rounded shadow">
         <h2 className="text-2xl font-semibold text-indigo-700 mb-4">Send Us a Message</h2>
         <form className="space-y-4">

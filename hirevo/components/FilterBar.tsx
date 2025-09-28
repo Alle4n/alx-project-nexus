@@ -10,7 +10,6 @@ export default function FilterBar() {
   const [category, setCategory] = useState(filters.category || "");
   const [location, setLocation] = useState(filters.location || "");
 
-  // Keep local state in sync if context filters change externally
   useEffect(() => {
     setQuery(filters.query || "");
     setCategory(filters.category || "");
@@ -31,7 +30,7 @@ export default function FilterBar() {
     setQuery("");
     setCategory("");
     setLocation("");
-    setFilters({ page: 1 }); // reset context filters
+    setFilters({ page: 1 });
   };
 
   return (

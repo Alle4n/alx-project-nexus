@@ -1,8 +1,6 @@
-// pages/about.tsx
 export default function AboutPage() {
   return (
     <main className="max-w-5xl mx-auto p-6 space-y-8">
-      {/* Page Header */}
       <header className="text-center space-y-2">
         <h1 className="text-4xl font-bold text-indigo-600">About Hirevo</h1>
         <p className="text-gray-700 text-lg">
@@ -10,7 +8,6 @@ export default function AboutPage() {
         </p>
       </header>
 
-      {/* Vision Section */}
       <section className="bg-indigo-50 p-6 rounded shadow">
         <h2 className="text-2xl font-semibold text-indigo-700 mb-2">Our Vision</h2>
         <p className="text-gray-700">
@@ -18,7 +15,6 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* Mission Section */}
       <section className="bg-green-50 p-6 rounded shadow">
         <h2 className="text-2xl font-semibold text-green-700 mb-2">Our Mission</h2>
         <p className="text-gray-700">
@@ -26,7 +22,6 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* Core Values Section */}
       <section className="bg-yellow-50 p-6 rounded shadow">
         <h2 className="text-2xl font-semibold text-yellow-700 mb-2">Our Core Values</h2>
         <ul className="list-disc list-inside text-gray-700 space-y-1">
@@ -37,7 +32,6 @@ export default function AboutPage() {
         </ul>
       </section>
 
-      {/* About Hirevo Section */}
       <section className="bg-white p-6 rounded shadow">
         <h2 className="text-2xl font-semibold text-indigo-700 mb-2">About Hirevo</h2>
         <p className="text-gray-700 leading-relaxed">

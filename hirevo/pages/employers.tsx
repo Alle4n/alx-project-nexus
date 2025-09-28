@@ -3,6 +3,13 @@ import { useState } from "react";
 import PostJobForm from "@/components/PostJobForm";
 import JobCard from "@/components/JobCard";
 import { useJobs } from "@/context/JobContext";
+import type { Job } from "@/context/JobContext";
+
+interface PostJobFormProps {
+  onClose: () => void;
+  onAdd: (job: Job) => void;
+  employerName?: string;
+}
 
 export default function EmployersPage() {
   const { jobs, addJob, updateJob, deleteJob } = useJobs();
@@ -12,7 +19,6 @@ export default function EmployersPage() {
     <div className="max-w-5xl mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">Employer Dashboard</h1>
 
-      {/* Post Job Button */}
       <div className="mb-6">
         <button
           className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
@@ -22,7 +28,6 @@ export default function EmployersPage() {
         </button>
       </div>
 
-      {/* Post Job Form Modal */}
       {showPostForm && (
         <PostJobForm
           onClose={() => setShowPostForm(false)}
@@ -43,7 +48,7 @@ export default function EmployersPage() {
             job={job}
             onUpdate={updateJob}
             onDelete={deleteJob}
-            isEmployerView={true} // optional prop to hide "Apply" button
+            isEmployerView={true}
           />
         ))}
       </section>

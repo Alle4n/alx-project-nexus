@@ -29,7 +29,7 @@ export default function SignupPage() {
         return;
       }
 
-      router.push("/auth/login"); // redirect to login after signup
+      router.push("/auth/login"); 
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {

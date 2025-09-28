@@ -74,7 +74,6 @@ export const JobProvider = ({ children }: Props) => {
       const data: Job[] = await res.json();
       console.log("Fetched jobs:", data);
 
-      // Apply filters client-side
       const filtered = data.filter((job) => {
         const matchesQuery =
           !filters.query ||
@@ -91,7 +90,7 @@ export const JobProvider = ({ children }: Props) => {
 
       setLocations([...new Set(data.map((job) => job.location.city).filter(Boolean))]);
       setCategories([
-        ...new Set(data.map((job) => job.category?.name).filter(Boolean)),
+        ...new Set(data.map((job) => job.category?.name).filter((name): name is string => Boolean(name))),
       ]);
     } catch (err: any) {
       console.log("Error fetching jobs:", err);

@@ -19,7 +19,6 @@ export default function Navbar() {
   return (
     <nav className="bg-gray-200 shadow-md sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-        {/* Logo */}
         <Link href="/" className="text-xl font-bold text-blue-600">
           Hir<span className="text-gray-800">evo</span>
         </Link>
@@ -58,7 +57,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu Button */}
-        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden">
+        <button onClick={() => setIsOpen(!isOpen)} className="text-black md:hidden">
           ☰
         </button>
       </div>
